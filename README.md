@@ -1,8 +1,11 @@
 # NarrativAI
 
+---
+
 ## Overview
 This project is about creating Discord roleplaying bots that can interact with users in a detailed or concise manner based on the configured response style. These bots can be created via a character description given by the user OR summarised via scraping a given link
 
+---
 
 ## Requirements
 - Python 3.8+
@@ -67,7 +70,6 @@ Ensure you have the necessary permissions and intents enabled on your Discord bo
 
 ---
 
----
 
 ## Contributions
 Contributions are welcome! Please create a pull request or issue if you have suggestions.
