@@ -3,7 +3,6 @@
 ## Overview
 This project is about creating Discord roleplaying bots that can interact with users in a detailed or concise manner based on the configured response style. These bots can be created via a character description given by the user OR summarised via scraping a given link
 
----
 
 ## Requirements
 - Python 3.8+
