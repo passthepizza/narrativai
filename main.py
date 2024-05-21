@@ -163,16 +163,13 @@ async def generate_response(message, channel, user_personas):
             messages.extend([{"role": c["role"], "content": c["text"]} for c in context])
             messages.extend(list(history)[-5:])
 
-            # Detect emotions in the user's message
             emotion_output = query({"inputs": message.content})
             detected_emotion = emotion_output[0][0]['label']    
 
-            # Retrieve the user's persona and relationship with the bot
             user_persona = user_personas.get(channel.id, {}).get(message.author.id, {})
             persona = user_persona.get("persona", "")
             relationship = user_persona.get("relationship", "neutral")
 
-            # Append the detected emotion and user persona to the messages
             messages.append({"role": "system", "content": f"The user is feeling: {detected_emotion}"})
             messages.append({"role": "system", "content": f"User persona: {persona}"})
             messages.append({"role": "system", "content": f"Relationship: {relationship}"})
@@ -193,7 +190,6 @@ async def generate_response(message, channel, user_personas):
             await store_embeddings(channel.id, message.content, "user", detected_emotion, relationship)
             await store_embeddings(channel.id, response, "assistant", None, None)
 
-            # Extract the text within quotation marks
             quoted_text = ""
             inside_quotes = False
             for char in response:
@@ -202,7 +198,7 @@ async def generate_response(message, channel, user_personas):
                 elif inside_quotes:
                     quoted_text += char
 
-            voice_file = None  # Initialize voice_file to None
+            voice_file = None  
             if "elevenlabs_voice_id" in config and quoted_text:
                 headers = {
                     "Accept": "audio/mpeg",
@@ -235,14 +231,11 @@ async def generate_response(message, channel, user_personas):
                         with open(temp_mp3_fd, "wb") as temp_mp3:
                             temp_mp3.write(api_response.content)
 
-                        # Set the path to your JPG image file
                         image_path = "uwu.png"
 
-                        # Get the duration of the audio file
                         audio_info = ffmpeg.probe(temp_mp3_path)
                         duration = float(audio_info["format"]["duration"])
 
-                        # Create the video with the JPG image and generated audio
                         os.system(f"ffmpeg -loop 1 -i {image_path} -i {temp_mp3_path} -c:v libx264 -tune stillimage -c:a aac -b:a 192k -pix_fmt yuv420p -shortest -y {temp_mp4_path}")
 
                         with open(temp_mp4_path, "rb") as f:
@@ -327,7 +320,7 @@ async def generate_scenario_response(scenario, channel, user_personas):
             messages.extend([{"role": c["role"], "content": c["text"]} for c in context])
             messages.extend(list(history)[-5:])
             messages.append({"role": "user", "content": "."})
-            
+
             logging.info(f"Sending API request for scenario: {scenario}")
             logging.info(f"Messages: {messages}")
 
